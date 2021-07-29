@@ -8,7 +8,6 @@ import (
 	"DemoProject/modules/staff/staffstorage"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
 func UpdateStaff(ctx appctx.AppContext) gin.HandlerFunc {
@@ -19,7 +18,8 @@ func UpdateStaff(ctx appctx.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		id, err := strconv.Atoi(c.Param("id"))
+		uid, err := common.FromBase58(c.Param("id"))
+		//id, err := strconv.Atoi(c.Param("id"))
 
 		if err != nil {
 			panic(common.ErrInvalidRequest(err))
@@ -28,7 +28,7 @@ func UpdateStaff(ctx appctx.AppContext) gin.HandlerFunc {
 		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
 		biz := staffbiz.NewUpdateStaffBiz(store)
 
-		if err := biz.UpdateStaffBiz(c.Request.Context(), id, &data); err != nil {
+		if err := biz.UpdateStaffBiz(c.Request.Context(), int(uid.GetLocalID()), &data); err != nil {
 			panic(err)
 		}
 

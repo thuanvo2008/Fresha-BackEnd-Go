@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-func (s *sqlStore) Create(ctx context.Context, data staffmodel.StaffCrete) error {
+func (s *sqlStore) Create(ctx context.Context, data *staffmodel.StaffCrete) error {
 	db := s.db
 
 	if err := db.Create(data).Error; err != nil {

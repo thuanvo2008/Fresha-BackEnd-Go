@@ -35,6 +35,14 @@ func ListStaff(ctx appctx.AppContext) gin.HandlerFunc {
 			panic(err)
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
+		for i := range data {
+			data[i].Mask(false)
+
+			if i == (len(data) - 1) {
+				paging.NextCursor = data[i].FakeID.String()
+			}
+		}
+
+		c.JSON(http.StatusOK, common.NewSuccessResponse(data, paging, filter))
 	}
 }

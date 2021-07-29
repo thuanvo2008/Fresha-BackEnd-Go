@@ -2,7 +2,10 @@ package main
 
 import (
 	"DemoProject/component/appctx"
+	"DemoProject/component/uploadprovider"
+	"DemoProject/middleware"
 	"DemoProject/modules/staff/stafftransport/ginstaff"
+	"DemoProject/modules/upload/uploadtransport/ginupload"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -17,23 +20,27 @@ func main() {
 	if err != nil {
 		fmt.Printf("Loi cmnr")
 	}
+	var provider uploadprovider.UploadProvider
 
-	if err := runService(db); err != nil {
+	if err := runService(db, provider); err != nil {
 		panic("loi roi")
 	}
 
 }
 
-func runService(db *gorm.DB) error {
+func runService(db *gorm.DB, provider uploadprovider.UploadProvider) error {
 	r := gin.Default()
 
-	appCtx := appctx.NewAppContext(db)
+	appCtx := appctx.NewAppContext(db, provider)
+	r.Use(middleware.Recover(appCtx))
 
 	r.GET("/", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
+
+	r.POST("/uploadFile", ginupload.UploadFile(appCtx))
 
 	staff := r.Group("/staff")
 	{

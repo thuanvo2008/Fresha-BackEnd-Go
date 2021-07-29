@@ -21,10 +21,12 @@ func CreateStaff(ctx appctx.AppContext) gin.HandlerFunc {
 		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
 		biz := staffbiz.NewCreateStaffBiz(store)
 
-		if err := biz.CreateStaffBiz(c.Request.Context(), data); err != nil {
+		if err := biz.CreateStaffBiz(c.Request.Context(), &data); err != nil {
 			panic(err)
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
+		data.GenUID(common.DBTypeStaff)
+
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.FakeID.String()))
 	}
 }

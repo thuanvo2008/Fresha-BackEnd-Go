@@ -7,12 +7,13 @@ import (
 	"DemoProject/modules/staff/staffstorage"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
 func DeleteStaff(ctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id, err := strconv.Atoi(c.Param("id"))
+		uid, err := common.FromBase58(c.Param("id"))
+
+		//id, err := strconv.Atoi(c.Param("id"))
 
 		if err != nil {
 			panic(common.ErrInvalidRequest(err))
@@ -21,7 +22,7 @@ func DeleteStaff(ctx appctx.AppContext) gin.HandlerFunc {
 		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
 		biz := staffbiz.NewDeleteStaffBiz(store)
 
-		if err := biz.DeleteStaffBiz(c.Request.Context(), id); err != nil {
+		if err := biz.DeleteStaffBiz(c.Request.Context(), int(uid.GetLocalID())); err != nil {
 			panic(err)
 		}
 
