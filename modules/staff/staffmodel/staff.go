@@ -2,6 +2,7 @@ package staffmodel
 
 import (
 	"DemoProject/common"
+	"errors"
 	"strings"
 )
 
@@ -12,6 +13,8 @@ type Staff struct {
 	StoreId         int           `json:"store_id" gorm:"column:store_id"`
 	Firstname       string        `json:"first_name" gorm:"column:first_name"`
 	Lastname        string        `json:"last_name" gorm:"column:last_name"`
+	Password        string        `json:"password" gorm:"column:password;"`
+	Salt            string        `json:"-" gorm:"column:salt;"`
 	Avatar          *common.Image `json:"avatar" gorm:"column:avatar"`
 	Role            string        `json:"role" gorm:"column:role"`
 	Phone           string        `json:"phone" gorm:"column:phone"`
@@ -22,11 +25,17 @@ func (Staff) TableName() string {
 	return "staffs"
 }
 
+func (s *Staff) Mask(isAdminOrOwner bool) {
+	s.GenUID(common.DBTypeStaff)
+}
+
 type StaffCrete struct {
 	common.SQLModel `json:",inline"`
 	StoreId         int           `json:"store_id" gorm:"column:store_id"`
 	Firstname       string        `json:"first_name" gorm:"column:first_name"`
 	Lastname        string        `json:"last_name" gorm:"column:last_name"`
+	Password        string        `json:"password" gorm:"column:password;"`
+	Salt            string        `json:"-" gorm:"column:salt;"`
 	Avatar          *common.Image `json:"avatar" gorm:"column:avatar"`
 	Role            string        `json:"role" gorm:"column:role"`
 	Phone           string        `json:"phone" gorm:"column:phone"`
@@ -35,6 +44,10 @@ type StaffCrete struct {
 
 func (StaffCrete) TableName() string {
 	return Staff{}.TableName()
+}
+
+func (s *StaffCrete) Mask(isAdminOrOwner bool) {
+	s.GenUID(common.DBTypeStaff)
 }
 
 func (s *StaffCrete) Validation() error {
@@ -51,6 +64,7 @@ func (s *StaffCrete) Validation() error {
 type StaffUpdate struct {
 	Firstname *string       `json:"first_name" gorm:"column:first_name"`
 	Lastname  *string       `json:"last_name" gorm:"column:last_name"`
+	Password  string        `json:"password" gorm:"column:password;"`
 	Status    int           `json:"status" gorm:"column:status"`
 	Avatar    *common.Image `json:"avatar" gorm:"column:avatar"`
 	Role      string        `json:"role" gorm:"column:role"`
@@ -62,6 +76,16 @@ func (StaffUpdate) TableName() string {
 	return Staff{}.TableName()
 }
 
-func (s *Staff) Mask(isAdminOrOwner bool) {
-	s.GenUID(common.DBTypeStaff)
-}
+var (
+	ErrUsernameOrPasswordInvalid = common.NewCustomError(
+		errors.New("username or password invalid"),
+		"username or password invalid",
+		"ErrUsernameOrPasswordInvalid",
+	)
+
+	ErrEmailExisted = common.NewCustomError(
+		errors.New("email has already existed"),
+		"email has already existed",
+		"ErrEmailExisted",
+	)
+)
