@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 func main() {
@@ -21,28 +20,25 @@ func main() {
 		fmt.Printf("Loi cmnr")
 	}
 	var provider uploadprovider.UploadProvider
-
-	if err := runService(db, provider); err != nil {
+	secretKey := "Fresha_CopDeal"
+	if err := runService(db, provider, secretKey); err != nil {
 		panic("loi roi")
 	}
 
 }
 
-func runService(db *gorm.DB, provider uploadprovider.UploadProvider) error {
+func runService(db *gorm.DB, provider uploadprovider.UploadProvider, secretKey string) error {
 	r := gin.Default()
 
-	appCtx := appctx.NewAppContext(db, provider)
+	appCtx := appctx.NewAppContext(db, provider, secretKey)
 	r.Use(middleware.Recover(appCtx))
 
-	r.GET("/", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	v1 := r.Group("/v1")
+	v1.POST("/uploadFile", ginupload.UploadFile(appCtx))
+	v1.POST("/login", ginstaff.Login(appCtx))
+	v1.POST("/register", ginstaff.RegisterStaff(appCtx))
 
-	r.POST("/uploadFile", ginupload.UploadFile(appCtx))
-
-	staff := r.Group("/staff")
+	staff := v1.Group("/staff", middleware.RequiredAuth(appCtx))
 	{
 		staff.POST("", ginstaff.CreateStaff(appCtx))
 		staff.GET("", ginstaff.ListStaff(appCtx))
