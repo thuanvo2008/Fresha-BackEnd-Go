@@ -26,7 +26,7 @@ func ListStaff(ctx appctx.AppContext) gin.HandlerFunc {
 
 		paging.Fulfill()
 
-		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
+		store := staffstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := staffbiz.NewListStaffBiz(store)
 
 		data, err := biz.ListStaffBiz(c.Request.Context(), &filter, &paging)

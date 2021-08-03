@@ -32,7 +32,7 @@ func UploadFile(ctx appctx.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		store := uploadstorage.NewSQLStore(ctx.GetMainDBConnect())
+		store := uploadstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := uploadbiz.NewUploadBiz(ctx.UploadProvider(), store)
 		img, err := biz.Upload(c.Request.Context(), myBytes, folder, fileHeader.Filename)
 

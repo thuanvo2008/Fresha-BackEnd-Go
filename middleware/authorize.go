@@ -39,7 +39,7 @@ func RequiredAuth(appCtx appctx.AppContext) func(c *gin.Context) {
 			panic(err)
 		}
 
-		db := appCtx.GetMainDBConnect()
+		db := appCtx.GetMainDBConnection()
 		store := staffstorage.NewSQLStore(db)
 
 		payload, err := tokenProvider.Validate(token)

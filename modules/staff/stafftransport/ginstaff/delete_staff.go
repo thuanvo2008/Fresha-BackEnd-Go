@@ -19,7 +19,7 @@ func DeleteStaff(ctx appctx.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
+		store := staffstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := staffbiz.NewDeleteStaffBiz(store)
 
 		if err := biz.DeleteStaffBiz(c.Request.Context(), int(uid.GetLocalID())); err != nil {

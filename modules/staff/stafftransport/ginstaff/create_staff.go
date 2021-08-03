@@ -18,7 +18,7 @@ func CreateStaff(ctx appctx.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
+		store := staffstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := staffbiz.NewCreateStaffBiz(store)
 
 		if err := biz.CreateStaffBiz(c.Request.Context(), &data); err != nil {

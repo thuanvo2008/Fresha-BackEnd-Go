@@ -25,7 +25,7 @@ func UpdateStaff(ctx appctx.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
+		store := staffstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := staffbiz.NewUpdateStaffBiz(store)
 
 		if err := biz.UpdateStaffBiz(c.Request.Context(), int(uid.GetLocalID()), &data); err != nil {

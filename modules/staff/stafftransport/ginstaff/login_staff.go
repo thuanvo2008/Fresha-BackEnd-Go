@@ -3,7 +3,7 @@ package ginstaff
 import (
 	"DemoProject/common"
 	"DemoProject/component/appctx"
-	"DemoProject/component/haser"
+	"DemoProject/component/hasher"
 	"DemoProject/component/tokenprovider/jwt"
 	"DemoProject/modules/staff/staffbiz"
 	"DemoProject/modules/staff/staffmodel"
@@ -20,11 +20,11 @@ func Login(appCtx appctx.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		db := appCtx.GetMainDBConnect()
+		db := appCtx.GetMainDBConnection()
 		tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
 
 		store := staffstorage.NewSQLStore(db)
-		md5 := haser.NewMd5Hash()
+		md5 := hasher.NewMd5Hash()
 
 		business := staffbiz.NewLoginBusiness(store, tokenProvider, md5, 60*60*24*30)
 		account, err := business.Login(c.Request.Context(), &loginStaffData)

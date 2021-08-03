@@ -25,10 +25,10 @@ func NewRegisterBusiness(store RegisterStaffStore, hasher Hasher) (resBiz *regis
 }
 
 func (resBiz *registerBusiness) Register(ctx context.Context, staff *staffmodel.StaffCrete) error {
-	data, err := resBiz.registerStaffStore.FindDataByCondition(ctx, map[string]interface{}{"email": staff.Email})
-	if err == common.RecordNotFound {
-		return err
-	}
+	data, _ := resBiz.registerStaffStore.FindDataByCondition(ctx, map[string]interface{}{"email": staff.Email})
+	//if err == common.RecordNotFound {
+	//	return err
+	//}
 
 	if data != nil {
 		return staffmodel.ErrEmailExisted

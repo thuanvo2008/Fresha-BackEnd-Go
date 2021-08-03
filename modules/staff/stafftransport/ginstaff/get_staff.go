@@ -19,7 +19,7 @@ func GetStaff(ctx appctx.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
+		store := staffstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := staffbiz.NewGetStaffBiz(store)
 
 		data, err := biz.GetStaffBiz(context.Request.Context(), int(uid.GetLocalID()))

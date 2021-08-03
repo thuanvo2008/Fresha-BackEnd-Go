@@ -36,9 +36,9 @@ type StaffCrete struct {
 	Lastname        string        `json:"last_name" gorm:"column:last_name"`
 	Password        string        `json:"password" gorm:"column:password;"`
 	Salt            string        `json:"-" gorm:"column:salt;"`
-	Avatar          *common.Image `json:"avatar" gorm:"column:avatar"`
-	Role            string        `json:"role" gorm:"column:role"`
-	Phone           string        `json:"phone" gorm:"column:phone"`
+	Avatar          *common.Image `json:"avatar,omitempty" gorm:"column:avatar;type:json"`
+	Role            string        `json:"-" gorm:"column:role"`
+	Phone           string        `json:"-" gorm:"column:phone"`
 	Email           string        `json:"email" gorm:"column:email"`
 }
 

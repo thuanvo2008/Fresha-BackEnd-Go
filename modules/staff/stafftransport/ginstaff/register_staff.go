@@ -3,7 +3,7 @@ package ginstaff
 import (
 	"DemoProject/common"
 	"DemoProject/component/appctx"
-	"DemoProject/component/haser"
+	"DemoProject/component/hasher"
 	"DemoProject/modules/staff/staffbiz"
 	"DemoProject/modules/staff/staffmodel"
 	"DemoProject/modules/staff/staffstorage"
@@ -13,22 +13,23 @@ import (
 
 func RegisterStaff(ctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var staffCreate staffmodel.StaffCrete
+		db := ctx.GetMainDBConnection()
+		var data staffmodel.StaffCrete
 
-		if err := c.ShouldBind(&staffCreate); err != nil {
-			panic(common.ErrInvalidRequest(err))
-		}
-
-		store := staffstorage.NewSQLStore(ctx.GetMainDBConnect())
-		md5 := haser.NewMd5Hash()
-		biz := staffbiz.NewRegisterBusiness(store, md5)
-
-		if err := biz.Register(c.Request.Context(), &staffCreate); err != nil {
+		if err := c.ShouldBind(&data); err != nil {
 			panic(err)
 		}
 
-		staffCreate.Mask(false)
+		store := staffstorage.NewSQLStore(db)
+		md5 := hasher.NewMd5Hash()
+		biz := staffbiz.NewRegisterBusiness(store, md5)
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(staffCreate.FakeID.String()))
+		if err := biz.Register(c.Request.Context(), &data); err != nil {
+			panic(err)
+		}
+
+		data.Mask(false)
+
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.FakeID.String()))
 	}
 }
