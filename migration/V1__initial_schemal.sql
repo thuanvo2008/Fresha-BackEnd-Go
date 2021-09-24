@@ -1,11 +1,14 @@
+use fresha;
+
 DROP TABLE IF EXISTS `types`; 
 CREATE TABLE `types` (
 	id int(10) NOT NULL AUTO_INCREMENT,
 	name varchar(255) NOT NULL,
+	img json DEFAULT NULL,
 	status int NOT NULL DEFAULT '1',
 	created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`)
 );
 
 DROP TABLE IF EXISTS `stores`;  
@@ -23,7 +26,7 @@ CREATE TABLE `stores`  (
 	status int NOT NULL DEFAULT '1',
     created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
   KEY `owner_id` (`owner_id`) USING BTREE,
   KEY `type_id` (`type_id`) USING BTREE,
   KEY `status` (`status`) USING BTREE
@@ -117,7 +120,7 @@ DROP TABLE IF EXISTS `services`;
 CREATE TABLE `services` (
 	id int(10) NOT NULL AUTO_INCREMENT,
 	store_id int(10) NOT NULL,
-	category_id int(10) DEFAULT NULL ,
+	category_id int(10) NOT NULL ,
 	title varchar(100) DEFAULT NULL ,
 	description text DEFAULT NULL ,
 	status int NOT NULL DEFAULT '1',
@@ -144,7 +147,7 @@ CREATE TABLE `service_details`  (
 	service_id int(10) NOT NULL,
 	title varchar(100) DEFAULT NULL ,
 	price float  NOT NULL,
-	duration time NOT NULL,
+	duration int NOT NULL,
 	description text DEFAULT NULL,
 	status int NOT NULL DEFAULT '1',
     created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -163,7 +166,7 @@ CREATE TABLE `service_staffs` (
 
 DROP TABLE IF EXISTS `service_working`; 
 CREATE TABLE `service_working`  (
-	id int(10) NOT NULL AUTO_INCREMENT,
+	id int(10) NOT NULL,
 	staff_id int(10) NOT NULL,
 	start_time time NOT NULL,
 	end_time time NOT NULL,
@@ -175,7 +178,7 @@ CREATE TABLE `service_working`  (
 
 DROP TABLE IF EXISTS `service_working_repeat`; 
 CREATE TABLE `service_working_repeat` (
-	id int(10) NOT NULL AUTO_INCREMENT,
+	id int(10) NOT NULL,
 	staff_id int(10) NOT NULL,
 	start_time time NOT NULL,
 	end_time time NOT NULL,
@@ -189,16 +192,16 @@ CREATE TABLE `service_working_repeat` (
 DROP TABLE IF EXISTS `appointments`; 
 CREATE TABLE `appointments` (
 	id int(10) NOT NULL AUTO_INCREMENT,
-	client_id int(10) DEFAULT NULL,
-	service_id int(10) NOT NULL,
-	user_id int(10) NOT NULL,
+	user_id int(10) DEFAULT NULL,
+	store_id int(10) DEFAULT NULL,
 	staff_id int(10) NOT NULL,
-	duration time NOT NULL,
-	price float NOT NULL,
+	start_time timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+	end_time timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+	total_price float NOT NULL,
 	status int NOT NULL DEFAULT '1',
 	created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	PRIMARY KEY (`id`,`service_id`)
+	PRIMARY KEY (`id`)
 );
 
 DROP TABLE IF EXISTS `appointment_service`; 
@@ -211,3 +214,15 @@ CREATE TABLE `appointment_service`(
 	PRIMARY KEY (`appointment_id`,`service_id`)
 );
 
+DROP TABLE IF EXISTS `store_rating`; 
+CREATE TABLE `store_rating`(
+	user_id int NOT NULL,
+	store_id int NOT NULL,
+	point float NOT NULL,
+	cmt text DEFAULT NULL,
+	status int DEFAULT 1,
+	created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (`user_id`,`store_id`),
+  KEY `store_id` (`store_id`)
+);
