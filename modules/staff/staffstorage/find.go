@@ -9,14 +9,14 @@ import (
 
 func (s *sqlStore) FindDataByCondition(ctx context.Context,
 	condition map[string]interface{},
-	monkeys ...string) (*staffmodel.Staff, error) {
+	moreKeys ...string) (*staffmodel.Staff, error) {
 
 	var result staffmodel.Staff
 
 	db := s.db
 
-	for i := range monkeys {
-		db = db.Preload(monkeys[i])
+	for i := range moreKeys {
+		db = db.Preload(moreKeys[i])
 	}
 
 	if err := db.Where(condition).First(&result).Error; err != nil {

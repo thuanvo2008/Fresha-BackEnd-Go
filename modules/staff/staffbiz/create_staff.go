@@ -19,7 +19,7 @@ func NewCreateStaffBiz(store CreateStaffStore) *createStaffBiz {
 
 func (biz *createStaffBiz) CreateStaffBiz(ctx context.Context, data *staffmodel.StaffCrete) error {
 	if err := data.Validation(); err != nil {
-		panic("loi")
+		return err
 	}
 
 	if err := biz.store.Create(ctx, data); err != nil {
