@@ -21,8 +21,7 @@ func Find(ctx appctx.AppContext) gin.HandlerFunc {
 		store := businesstimestorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := businesstimebiz.NewFindBusinessTimeBiz(store)
 
-		result, err := biz.FindBusinessTime(c.Request.Context(), data.StoreID,
-			data.StartTime, data.EndTime, data.StartTime.Weekday().String())
+		result, err := biz.FindBusinessTime(c.Request.Context(), data.StoreID, data.StartTime.Weekday().String())
 		if err != nil {
 			panic(err)
 		}
