@@ -25,7 +25,7 @@ func NewUpdateStaffBiz(store UpdateStaffStore) *updateStaffBiz {
 	return &updateStaffBiz{store: store}
 }
 
-func (biz *updateStaffBiz) UpdateStaffBiz(ctx context.Context,
+func (biz *updateStaffBiz) UpdateStaff(ctx context.Context,
 	id int,
 	data *staffmodel.StaffUpdate) error {
 

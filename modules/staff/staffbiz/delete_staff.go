@@ -22,7 +22,7 @@ func NewDeleteStaffBiz(store DeleteStaffStore) *deleteStaffBiz {
 	return &deleteStaffBiz{store: store}
 }
 
-func (biz *deleteStaffBiz) DeleteStaffBiz(ctx context.Context, id int) error {
+func (biz *deleteStaffBiz) DeleteStaff(ctx context.Context, id int) error {
 
 	oldData, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"id": id})
 

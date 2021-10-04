@@ -20,7 +20,7 @@ func NewGetStaffBiz(store GetStaffStore) *getStaffBiz {
 	return &getStaffBiz{store: store}
 }
 
-func (biz *getStaffBiz) GetStaffBiz(ctx context.Context,
+func (biz *getStaffBiz) GetStaff(ctx context.Context,
 	id int) (*staffmodel.Staff, error) {
 
 	data, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"id": id})

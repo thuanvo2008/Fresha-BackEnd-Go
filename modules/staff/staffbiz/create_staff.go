@@ -17,7 +17,7 @@ func NewCreateStaffBiz(store CreateStaffStore) *createStaffBiz {
 	return &createStaffBiz{store: store}
 }
 
-func (biz *createStaffBiz) CreateStaffBiz(ctx context.Context, data *staffmodel.StaffCrete) error {
+func (biz *createStaffBiz) CreateStaff(ctx context.Context, data *staffmodel.StaffCrete) error {
 	if err := data.Validation(); err != nil {
 		return err
 	}

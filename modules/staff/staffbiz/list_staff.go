@@ -23,7 +23,7 @@ func NewListStaffBiz(store ListStaffStore) *listStaffBiz {
 	return &listStaffBiz{store: store}
 }
 
-func (biz *listStaffBiz) ListStaffBiz(ctx context.Context,
+func (biz *listStaffBiz) ListStaff(ctx context.Context,
 	filter *staffmodel.Filter,
 	paging *common.Paging,
 ) ([]staffmodel.Staff, error) {
