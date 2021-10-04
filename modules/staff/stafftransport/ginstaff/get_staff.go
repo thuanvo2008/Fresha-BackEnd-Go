@@ -22,7 +22,7 @@ func GetStaff(ctx appctx.AppContext) gin.HandlerFunc {
 		store := staffstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := staffbiz.NewGetStaffBiz(store)
 
-		data, err := biz.GetStaffBiz(context.Request.Context(), int(uid.GetLocalID()))
+		data, err := biz.GetStaff(context.Request.Context(), int(uid.GetLocalID()))
 
 		if err != nil {
 			panic(err)
