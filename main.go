@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"os"
 )
 
 func main() {
@@ -74,6 +75,6 @@ func runService(db *gorm.DB, provider uploadprovider.UploadProvider, secretKey s
 	{
 		staff_working.POST("", ginstaffworking.Create(appCtx))
 	}
-
-	return r.Run()
+	port := os.Getenv("PORT")
+	return r.Run(port)
 }
