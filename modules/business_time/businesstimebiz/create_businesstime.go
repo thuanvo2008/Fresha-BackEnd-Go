@@ -4,13 +4,11 @@ import (
 	"DemoProject/modules/business_time/businesstimemodel"
 	"context"
 	"errors"
-	"time"
 )
 
 type CreateBusinessTimeStorage interface {
 	Create(ctx context.Context, data *businesstimemodel.BusinessTime) error
-	Find(ctx context.Context, storeID int, appointmentStartTime,
-		appointmentEndTime *time.Time, dayOfWeek string) (*businesstimemodel.BusinessTime, error)
+	Find(ctx context.Context, storeID int, dayOfWeek string) (*businesstimemodel.BusinessTime, error)
 }
 
 type createBusinessTimeBiz struct {
@@ -22,7 +20,7 @@ func NewCreateBusinessTimeBiz(store CreateBusinessTimeStorage) *createBusinessTi
 }
 
 func (biz *createBusinessTimeBiz) CreateBusinessTime(ctx context.Context, data *businesstimemodel.BusinessTime) error {
-	oldData, err := biz.store.Find(ctx, data.StoreID, data.StartTime, data.EndTime, data.DayOfWeek.String())
+	oldData, err := biz.store.Find(ctx, data.StoreID, data.DayOfWeek)
 	if err != nil {
 		return err
 	}

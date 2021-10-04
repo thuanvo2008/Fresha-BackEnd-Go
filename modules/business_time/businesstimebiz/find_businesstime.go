@@ -3,12 +3,10 @@ package businesstimebiz
 import (
 	"DemoProject/modules/business_time/businesstimemodel"
 	"context"
-	"time"
 )
 
 type FindBusinessTimeStorage interface {
-	Find(ctx context.Context, storeID int, appointmentStartTime,
-		appointmentEndTime *time.Time, dayOfWeek string) (*businesstimemodel.BusinessTime, error)
+	Find(ctx context.Context, storeID int, dayOfWeek string) (*businesstimemodel.BusinessTime, error)
 }
 
 type findBusinessTimeBiz struct {
@@ -20,10 +18,9 @@ func NewFindBusinessTimeBiz(store FindBusinessTimeStorage) *findBusinessTimeBiz 
 }
 
 func (biz *findBusinessTimeBiz) FindBusinessTime(ctx context.Context,
-	storeID int, startTime,
-	endTime *time.Time, dayOfWeek string) (*businesstimemodel.BusinessTime, error) {
+	storeID int, dayOfWeek string) (*businesstimemodel.BusinessTime, error) {
 
-	data, err := biz.store.Find(ctx, storeID, startTime, endTime, dayOfWeek)
+	data, err := biz.store.Find(ctx, storeID, dayOfWeek)
 	if err != nil {
 		return nil, err
 	}
