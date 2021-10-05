@@ -42,7 +42,7 @@ func runService(db *gorm.DB, provider uploadprovider.UploadProvider, secretKey s
 	v1.POST("/uploadFile", ginupload.UploadFile(appCtx))
 	v1.POST("/login", ginstaff.Login(appCtx))
 	v1.POST("/register", ginstaff.RegisterStaff(appCtx))
-
+	v1.GET("/", ginstaff.TestingHeroku(appCtx))
 	staff := v1.Group("/staff") //, middleware.RequiredAuth(appCtx)
 	{
 		staff.POST("", ginstaff.CreateStaff(appCtx))
