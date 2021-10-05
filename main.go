@@ -17,7 +17,8 @@ import (
 )
 
 func main() {
-	dsn := "root:123456@tcp(127.0.0.1:3306)/Fresha?charset=utf8mb4&parseTime=True&loc=Local"
+	//dsn := "root:123456@tcp(127.0.0.1:3306)/Fresha?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := os.Getenv("DATABASE_URL")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	db = db.Debug()
 
