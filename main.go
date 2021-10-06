@@ -11,15 +11,15 @@ import (
 	"DemoProject/modules/staff_working/staffworkingtransport/ginstaffworking"
 	"DemoProject/modules/upload/uploadtransport/ginupload"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
 )
 
 func main() {
-	//dsn := "root:123456@tcp(127.0.0.1:3306)/Fresha?charset=utf8mb4&parseTime=True&loc=Local"
-	dsn := os.Getenv("DATABASE_URL")
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	dsn := os.Getenv("DSN")
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	db = db.Debug()
 
 	if err != nil {
@@ -76,6 +76,5 @@ func runService(db *gorm.DB, provider uploadprovider.UploadProvider, secretKey s
 	{
 		staff_working.POST("", ginstaffworking.Create(appCtx))
 	}
-	port := os.Getenv("PORT")
-	return r.Run(port)
+	return r.Run()
 }
