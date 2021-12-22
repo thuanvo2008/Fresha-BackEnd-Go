@@ -13,12 +13,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"os"
 )
 
 func main() {
-	//dsn := "root:123456@tcp(127.0.0.1:3306)/Fresha?charset=utf8mb4&parseTime=True&loc=Local"
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := "root:123456@tcp(127.0.0.1:3306)/Fresha?charset=utf8mb4&parseTime=True&loc=Local"
+	//dsn := os.Getenv("DATABASE_URL")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	db = db.Debug()
 
@@ -44,7 +43,7 @@ func runService(db *gorm.DB, provider uploadprovider.UploadProvider, secretKey s
 	v1.POST("/login", ginstaff.Login(appCtx))
 	v1.POST("/register", ginstaff.RegisterStaff(appCtx))
 	v1.GET("/", ginstaff.TestingHeroku(appCtx))
-	staff := v1.Group("/staff") //, middleware.RequiredAuth(appCtx)
+	staff := v1.Group("/staff", middleware.RequiredAuth(appCtx))
 	{
 		staff.POST("", ginstaff.CreateStaff(appCtx))
 		staff.GET("", ginstaff.ListStaff(appCtx))
@@ -76,6 +75,7 @@ func runService(db *gorm.DB, provider uploadprovider.UploadProvider, secretKey s
 	{
 		staff_working.POST("", ginstaffworking.Create(appCtx))
 	}
-	port := os.Getenv("PORT")
-	return r.Run(port)
+	//port := os.Getenv("PORT")
+	//return r.Run(port)
+	return r.Run()
 }
