@@ -61,7 +61,7 @@ func (biz *createAppointmentBiz) CreateAppointment(ctx context.Context, data *ap
 	bizTime, errBT := biz.businessTimeStore.Find(ctx, data.StoreID, data.StartTime.Weekday().String())
 	if errBT != nil {
 		if errBT == gorm.ErrRecordNotFound {
-			return gorm.ErrRecordNotFound
+			return errors.New("Store is not working in that day")
 		}
 		return errBT
 	}

@@ -57,7 +57,7 @@ func runService(db *gorm.DB, provider uploadprovider.UploadProvider, secretKey s
 		appointment.POST("", ginappointment.CreateAppointment(appCtx))
 		appointment.GET("/:id", ginappointment.GetAppointment(appCtx))
 		appointment.PATCH("/:id", ginappointment.UpdateAppointment(appCtx))
-		appointment.DELETE("/:id", ginappointment.CancelAppointment(appCtx))
+		appointment.DELETE("", ginappointment.CancelAppointment(appCtx))
 	}
 
 	service := v1.Group("/service")

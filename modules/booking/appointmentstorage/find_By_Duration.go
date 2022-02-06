@@ -11,9 +11,10 @@ func (s *sqlStore) FindDataByDuration(ctx context.Context, staffId int, startTim
 	db := s.db
 	var result appointmentmodel.Appointment
 
-	if err := db.Where("staff_id = ?", staffId).
-		Where("start_time <= ? And ? <= end_time", startTime, startTime).
-		Or("start_time <= ? And ? <= end_time", endTime, endTime).
+	if err := db.
+		Where("start_time <= ? And ? <= end_time "+
+			"OR start_time <= ? And ? <= end_time", startTime, startTime, endTime, endTime).
+		Where("staff_id = ?", staffId).
 		Where("status = 1").First(&result).Error; err != nil {
 		return nil, err
 	}

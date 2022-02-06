@@ -12,8 +12,7 @@ import (
 func CancelAppointment(ctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		type cancelAppointment struct {
-			ID           int    `json:"id" gorm:"column:id"`
-			CancelReason string `json:"cancel_reason" gorm:"column:cancel_reason"`
+			ID int `json:"id" gorm:"column:id"`
 		}
 		var cancel *cancelAppointment
 
@@ -23,7 +22,7 @@ func CancelAppointment(ctx appctx.AppContext) gin.HandlerFunc {
 
 		store := appointmentstorage.NewSQLStore(ctx.GetMainDBConnection())
 		biz := appointmentbiz.NewCancelAppointmentBiz(store)
-		if err := biz.CancelAppointment(c.Request.Context(), cancel.ID, cancel.CancelReason); err != nil {
+		if err := biz.CancelAppointment(c.Request.Context(), cancel.ID); err != nil {
 			panic(err)
 		}
 

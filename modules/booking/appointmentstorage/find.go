@@ -18,7 +18,7 @@ func (s *sqlStore) FindDataByCondition(ctx context.Context,
 		db = db.Preload(moreKeys[i])
 	}
 
-	if err := db.Where(condition).First(&result).Error; err != nil {
+	if err := db.Where(condition).Where("status = 1").First(&result).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, common.RecordNotFound
 		}

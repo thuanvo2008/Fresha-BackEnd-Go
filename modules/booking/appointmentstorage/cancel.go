@@ -5,12 +5,11 @@ import (
 	"context"
 )
 
-func (s *sqlStore) CancelAppointment(ctx context.Context, id int, cancelReason string) error {
+func (s *sqlStore) CancelAppointment(ctx context.Context, id int) error {
 	db := s.db
 
-	if err := db.Where("id = ?", id).Updates(map[string]interface{}{
-		"status":        0,
-		"cancel_reason": cancelReason,
+	if err := db.Table("appointments").Where("id = ?", id).Updates(map[string]interface{}{
+		"status": 0,
 	}).Error; err != nil {
 		return common.ErrDB(err)
 	}

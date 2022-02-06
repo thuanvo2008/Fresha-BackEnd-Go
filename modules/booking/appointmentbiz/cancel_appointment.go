@@ -12,7 +12,7 @@ type CancelAppointmentStorage interface {
 	FindDataByCondition(ctx context.Context,
 		condition map[string]interface{},
 		moreKeys ...string) (*appointmentmodel.Appointment, error)
-	CancelAppointment(ctx context.Context, id int, cancelReason string) error
+	CancelAppointment(ctx context.Context, id int) error
 }
 
 type cancelAppointmentBiz struct {
@@ -23,7 +23,7 @@ func NewCancelAppointmentBiz(store CancelAppointmentStorage) *cancelAppointmentB
 	return &cancelAppointmentBiz{store: store}
 }
 
-func (biz *cancelAppointmentBiz) CancelAppointment(ctx context.Context, id int, cancelReason string) error {
+func (biz *cancelAppointmentBiz) CancelAppointment(ctx context.Context, id int) error {
 	oldData, err := biz.store.FindDataByCondition(ctx, map[string]interface{}{"id": id})
 	if err != nil {
 		return gorm.ErrRecordNotFound
@@ -38,7 +38,7 @@ func (biz *cancelAppointmentBiz) CancelAppointment(ctx context.Context, id int, 
 		return errors.New("Cann't cancel this appointment")
 	}
 
-	if err := biz.store.CancelAppointment(ctx, id, cancelReason); err != nil {
+	if err := biz.store.CancelAppointment(ctx, id); err != nil {
 		return err
 	}
 
